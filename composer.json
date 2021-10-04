@@ -1,12 +1,12 @@
 {
     "name": "nouvu/container",
-    "description": "Container php7.4",
+    "description": "Container php8",
     "type": "library",
-    "license": "Apache-2.0",
-	"homepage": "https://github.com/MouseZver/ContainerPHP7",
+    "license": "MIT",
+	"homepage": "https://github.com/MouseZver/ContainerPHP",
 	"keywords": [
         "Container",
-		"php7.4"
+		"php8"
     ],
     "authors": [
         {
@@ -15,7 +15,8 @@
         }
     ],
 	"require": {
-		"php": ">=7.4"
+		"php": "^8.0",
+		"psr/container": "^2.0.1"
 	},
 	"autoload": {
 		"psr-4": {
