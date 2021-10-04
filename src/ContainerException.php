@@ -6,7 +6,7 @@ namespace Nouvu\Container;
 
 use Psr\Container\NotFoundExceptionInterface;
 
-class ContainerException implements \Throwable, NotFoundExceptionInterface
+class ContainerException extends \Exception implements NotFoundExceptionInterface
 {
 	
 }
