@@ -9,7 +9,7 @@ use Closure;
 
 final class Container implements ContainerInterface
 {
-	private array $container;
+	private array $container = [];
 	
 	public function set( string $name, Closure $closure ): void
 	{
@@ -35,7 +35,7 @@ final class Container implements ContainerInterface
 	
 	public function has( string $name ): bool
 	{
-		return isset ( $this -> container[$name] ) || array_key_exists ( $this -> container[$name] );
+		return isset ( $this -> container[$name] ) || array_key_exists ( $name, $this -> container );
 	}
 	
 	public function make( string $name, array $params = [] ): mixed
