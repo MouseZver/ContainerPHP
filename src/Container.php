@@ -13,11 +13,6 @@ final class Container implements ContainerInterface
 	
 	public function set( string $name, Closure $closure ): void
 	{
-		/* if ( isset ( $this -> container[$name] ) )
-		{
-			throw new \Error( $name . ' already exists!' );
-		} */
-		
 		$this -> container[$name] = $closure;
 	}
 	
@@ -40,12 +35,10 @@ final class Container implements ContainerInterface
 	
 	public function make( string $name, array $params = [] ): mixed
 	{
-		if ( $this -> has( $name ) )
+		if ( ! $this -> has( $name ) )
 		{
-			return $this -> get( $name );
+			$this -> set( $name, fn( ContainerInterface $ContainerInterface ): mixed => new $name( ...$params ) );
 		}
-		
-		$this -> set( $name, fn( ContainerInterface $ContainerInterface ) => new $name( ...$params ) );
 		
 		return $this -> get( $name );
 	}
