@@ -13,11 +13,13 @@ final class Container implements ContainerInterface
 	
 	public function set( string $name, Closure $closure ): void
 	{
-		$this -> container[$name] = $closure;
+		$this -> container[strtolower ( $name )] = $closure;
 	}
 	
 	public function get( string $name ): mixed
 	{
+		$name = strtolower ( $name );
+		
 		$this -> has( $name ) ?: throw new ContainerException( $name );
 		
 		if ( $this -> container[$name] instanceof Closure )
@@ -30,16 +32,20 @@ final class Container implements ContainerInterface
 	
 	public function has( string $name ): bool
 	{
+		$name = strtolower ( $name );
+		
 		return isset ( $this -> container[$name] ) || array_key_exists ( $name, $this -> container );
 	}
 	
 	public function make( string $name, array $params = [] ): mixed
 	{
-		if ( ! $this -> has( $name ) )
+		$_name = strtolower ( $name );
+		
+		if ( ! $this -> has( $_name ) )
 		{
-			$this -> set( $name, fn( ContainerInterface $ContainerInterface ): mixed => new $name( ...$params ) );
+			$this -> set( $_name, fn( ContainerInterface $ContainerInterface ): mixed => new $name( ...$params ) );
 		}
 		
-		return $this -> get( $name );
+		return $this -> get( $_name );
 	}
 }
