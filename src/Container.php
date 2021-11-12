@@ -11,41 +11,53 @@ final class Container implements ContainerInterface
 {
 	private array $container = [];
 	
-	public function set( string $name, Closure $closure ): void
+	public function set( string $offset, Closure $closure ): void
 	{
-		$this -> container[strtolower ( $name )] = $closure;
-	}
-	
-	public function get( string $name ): mixed
-	{
-		$name = strtolower ( $name );
-		
-		$this -> has( $name ) ?: throw new ContainerException( $name );
-		
-		if ( $this -> container[$name] instanceof Closure )
+		if ( $this -> has( $offset ) )
 		{
-			$this -> container[$name] = $this -> container[$name]( $this );
+			throw new ContainerException( "Such an entry already exists for '{$offset}'" )
 		}
 		
-		return $this -> container[$name];
+		$this -> container[strtolower ( $offset )] = new DI( $this, $closure );
 	}
 	
-	public function has( string $name ): bool
+	public function get( string $offset ): mixed
 	{
-		$name = strtolower ( $name );
+		$this -> has( $offset ) ?: throw new ContainerException( "No entry or class found for '{$offset}'" );
+		
+		return $this -> container[strtolower ( $offset )] -> get();
+	}
+	
+	public function has( string $offset ): bool
+	{
+		$name = strtolower ( $offset );
 		
 		return isset ( $this -> container[$name] ) || array_key_exists ( $name, $this -> container );
 	}
 	
 	public function make( string $name, array $params = [] ): mixed
 	{
-		$_name = strtolower ( $name );
-		
-		if ( ! $this -> has( $_name ) )
+		try
 		{
-			$this -> set( $_name, fn( ContainerInterface $ContainerInterface ): mixed => new $name( ...$params ) );
+			return $this -> get( $name );
+		}
+		catch ( ContainerException )
+		{
+			$this -> set( $name, fn( ContainerInterface $ContainerInterface ): mixed => new $name( ...$params ) );
+			
+			return $this -> get( $name );
+		}
+	}
+	
+	public function reset( string $offset ): bool
+	{
+		if ( $this -> has( $offset ) )
+		{
+			$this -> container[strtolower ( $offset )] -> reset();
+			
+			return true;
 		}
 		
-		return $this -> get( $_name );
+		return false;
 	}
 }
