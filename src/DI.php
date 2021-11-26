@@ -25,7 +25,7 @@ final class DI
 		
 		$this -> return = true;
 		
-		return $this -> instance = $this -> closure( $this -> container );
+		return $this -> instance = ( $this -> closure )( $this -> container );
 	}
 	
 	public function reset(): void
