@@ -15,7 +15,7 @@ final class Container implements ContainerInterface
 	{
 		if ( $this -> has( $offset ) )
 		{
-			throw new ContainerException( "Such an entry already exists for '{$offset}'" )
+			throw new ContainerException( "Such an entry already exists for '{$offset}'" );
 		}
 		
 		$this -> container[strtolower ( $offset )] = new DI( $this, $closure );
