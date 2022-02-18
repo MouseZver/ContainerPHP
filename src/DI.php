@@ -18,20 +18,11 @@ final class DI
 	
 	public function get(): mixed
 	{
-		if ( $this -> return )
-		{
-			return $this -> instance;
-		}
-		
-		$this -> return = true;
-		
-		return $this -> instance = ( $this -> closure )( $this -> container );
+		return $this -> instance ??= ( $this -> closure )( $this -> container );
 	}
 	
 	public function reset(): void
 	{
-		$this -> return = false;
-		
 		$this -> instance = null;
 	}
 }
