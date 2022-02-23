@@ -9,11 +9,9 @@ use Closure;
 
 final class DI
 {
-	private bool $return = false;
-	
 	private mixed $instance;
 	
-	public function __construct ( private ContainerInterface $container, private Closure $closure )
+	public function __construct ( private ContainerInterface $container, private readonly Closure $closure )
 	{}
 	
 	public function get(): mixed
